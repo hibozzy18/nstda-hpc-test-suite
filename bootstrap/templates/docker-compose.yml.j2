@@ -1,0 +1,48 @@
+# {{ ansible_managed }}
+### Notes
+# need to set hostname, which is a bit repetitive, even docker-compose not resolve things on hostname
+# https://github.com/docker/compose/issues/2925
+### Docker compose, Extension field
+# https://github.com/docker/compose/issues/5783
+# common hosts to extend to /etc/hosts, have to extend through extra_hosts field only.
+x-extra_hosts:
+  &cluster-hosts
+{% for host in groups['all'] %}
+{% for interface_type in interface_types %}
+{% if interface_type in hostvars[host] %}
+  - "{{ host }}:{{ hostvars[host][interface_type] }}"
+{% endif %}
+{% endfor %}
+{% endfor %}
+
+version: "3.6"
+services:
+{% for host in groups['all'] %}
+{% if host != 'localhost' %}
+  {{ host }}:
+    container_name: {{ host }}
+    hostname: {{ host }}
+    build: .
+    image: clean-centos7:{{ Dockerfile.stat.checksum }}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+{% for interface in interface_types %}
+{% if interface in hostvars[host] %}
+      {{ interface_to_subnet[interface] }}:
+        ipv4_address: {{ hostvars[host][interface] }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+networks:
+{% for subnet in subnets %}
+  {{ subnet.name }}:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: {{ subnet.subnet }}
+{% endfor %}

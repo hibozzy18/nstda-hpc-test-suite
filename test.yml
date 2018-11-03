@@ -1,0 +1,31 @@
+---
+- hosts: localhost
+  gather_facts: false
+  tasks:
+  - name: just ls
+    shell: /bin/ls -al
+  - name: "Check ansible version !=2.7.0"
+    assert:
+      msg: "Ansible V2.7.0 can't be used until: https://github.com/ansible/ansible/issues/46600 is fixed"
+      that:
+        - ansible_version.string is version("2.7.0", "!=")
+        - ansible_version.string is version("2.5.0", ">=")
+    tags:
+      - check
+#     name: httpd
+#     state: latest
+# - name: write the apache config file
+#   template:
+#     src: /srv/httpd.j2
+#     dest: /etc/httpd.conf
+#   notify:
+#   - restart apache
+# - name: ensure apache is running
+#   service:
+#     name: httpd
+#     state: started
+# handlers:
+#   - name: restart apache
+#     service:
+#       name: httpd
+#       state: restarted

@@ -1,0 +1,266 @@
+# Ansible managed
+### Notes
+# need to set hostname, which is a bit repetitive, even docker-compose not resolve things on hostname
+# https://github.com/docker/compose/issues/2925
+### Docker compose, Extension field
+# https://github.com/docker/compose/issues/5783
+# common hosts to extend to /etc/hosts, have to extend through extra_hosts field only.
+x-extra_hosts:
+  &cluster-hosts
+  - "tara-c-001:172.21.10.1"
+  - "tara-c-001:172.20.10.1"
+  - "tara-c-002:172.21.10.2"
+  - "tara-c-002:172.20.10.2"
+  - "tara-c-003:172.21.10.3"
+  - "tara-c-003:172.20.10.3"
+  - "tara-c-004:172.21.10.4"
+  - "tara-c-004:172.20.10.4"
+  - "tara-c-005:172.21.10.5"
+  - "tara-c-005:172.20.10.5"
+  - "tara-c-006:172.21.10.6"
+  - "tara-c-006:172.20.10.6"
+  - "tara-dgx1-001:172.21.31.1"
+  - "tara-dgx1-001:172.20.31.1"
+  - "tara-dgx1-002:172.21.31.2"
+  - "tara-dgx1-002:172.20.31.2"
+  - "tara-m-001:172.21.20.1"
+  - "tara-m-001:172.20.20.1"
+  - "tara-m-002:172.21.20.2"
+  - "tara-m-002:172.20.20.2"
+  - "slurmctld-1:172.21.5.3"
+  - "nfs:172.20.5.1"
+  - "mysql-1:172.21.5.5"
+  - "slurmdbd-1:172.21.5.4"
+  - "tara-frontend-1:172.21.1.2"
+  - "tara-frontend-1:172.20.1.2"
+  - "freeipa:172.21.5.2"
+
+version: "3.6"
+services:
+  tara-c-001:
+    container_name: tara-c-001
+    hostname: tara-c-001
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_1g:
+        ipv4_address: 172.21.10.1
+      private_ib:
+        ipv4_address: 172.20.10.1
+  tara-c-002:
+    container_name: tara-c-002
+    hostname: tara-c-002
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_1g:
+        ipv4_address: 172.21.10.2
+      private_ib:
+        ipv4_address: 172.20.10.2
+  tara-c-003:
+    container_name: tara-c-003
+    hostname: tara-c-003
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_1g:
+        ipv4_address: 172.21.10.3
+      private_ib:
+        ipv4_address: 172.20.10.3
+  tara-c-004:
+    container_name: tara-c-004
+    hostname: tara-c-004
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_1g:
+        ipv4_address: 172.21.10.4
+      private_ib:
+        ipv4_address: 172.20.10.4
+  tara-c-005:
+    container_name: tara-c-005
+    hostname: tara-c-005
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_1g:
+        ipv4_address: 172.21.10.5
+      private_ib:
+        ipv4_address: 172.20.10.5
+  tara-c-006:
+    container_name: tara-c-006
+    hostname: tara-c-006
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_1g:
+        ipv4_address: 172.21.10.6
+      private_ib:
+        ipv4_address: 172.20.10.6
+  tara-dgx1-001:
+    container_name: tara-dgx1-001
+    hostname: tara-dgx1-001
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_1g:
+        ipv4_address: 172.21.31.1
+      private_ib:
+        ipv4_address: 172.20.31.1
+  tara-dgx1-002:
+    container_name: tara-dgx1-002
+    hostname: tara-dgx1-002
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_1g:
+        ipv4_address: 172.21.31.2
+      private_ib:
+        ipv4_address: 172.20.31.2
+  tara-m-001:
+    container_name: tara-m-001
+    hostname: tara-m-001
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_1g:
+        ipv4_address: 172.21.20.1
+      private_ib:
+        ipv4_address: 172.20.20.1
+  tara-m-002:
+    container_name: tara-m-002
+    hostname: tara-m-002
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_1g:
+        ipv4_address: 172.21.20.2
+      private_ib:
+        ipv4_address: 172.20.20.2
+  slurmctld-1:
+    container_name: slurmctld-1
+    hostname: slurmctld-1
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_1g:
+        ipv4_address: 172.21.5.3
+  nfs:
+    container_name: nfs
+    hostname: nfs
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_ib:
+        ipv4_address: 172.20.5.1
+  mysql-1:
+    container_name: mysql-1
+    hostname: mysql-1
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_1g:
+        ipv4_address: 172.21.5.5
+  slurmdbd-1:
+    container_name: slurmdbd-1
+    hostname: slurmdbd-1
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_1g:
+        ipv4_address: 172.21.5.4
+  tara-frontend-1:
+    container_name: tara-frontend-1
+    hostname: tara-frontend-1
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_1g:
+        ipv4_address: 172.21.1.2
+      private_ib:
+        ipv4_address: 172.20.1.2
+  freeipa:
+    container_name: freeipa
+    hostname: freeipa
+    build: .
+    image: clean-centos7:7318c3e7e9eab2b854834dbc943cf62c
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      private_1g:
+        ipv4_address: 172.21.5.2
+networks:
+  private_1g:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.21.0.0/16
+  private_ib:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16

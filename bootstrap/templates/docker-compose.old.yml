@@ -1,0 +1,138 @@
+### Notes
+# need to set hostname, which a bit repetitive, even docker-compose not resolve things on hostname
+# https://github.com/docker/compose/issues/2925
+# fully connected assumption, non-networks or single subnet
+version: "3.6"
+services:
+  client:
+    image: sinonkt/docker-centos7-singularity-nextflow
+    ports:
+      - "10022:22"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    networks:
+      - public
+  frontend:
+    image: sinonkt/docker-centos7-singularity-nextflow
+    ports:
+      - "20022:22"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    networks:
+      - public
+      - private
+  c2:
+    container_name: c2
+    hostname: c22 
+    image: sinonkt/docker-centos7-singularity-nextflow
+    ports:
+      - "30022:22"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    networks:
+      - private
+networks:
+  public:
+  private:
+version: '2.1'
+
+# services:
+#   app:
+#     image: busybox
+#     command: ifconfig
+#     networks:
+#       app_net:
+#         ipv4_address: 172.16.238.10
+#         ipv6_address: 2001:3984:3989::10
+
+# networks:
+#   app_net:
+#     driver: bridge
+#     enable_ipv6: true
+#     ipam:
+#       driver: default
+#       config:
+#       - subnet: 172.16.238.0/24
+#         gateway: 172.16.238.1
+#       - subnet: 2001:3984:3989::/64
+#         gateway: 2001:3984:3989::1
+# ipam:
+#   driver: default
+#   config:
+#     - subnet: 172.28.0.0/16
+#       ip_range: 172.28.5.0/24
+#       gateway: 172.28.5.254
+#       aux_addresses:
+#         host1: 172.28.1.5
+#         host2: 172.28.1.6
+#         host3: 172.28.1.7
+#   options:
+#     foo: bar
+#     baz: "0"
+# ipam
+# Specify custom IPAM config. This is an object with several properties, each of which is optional:
+
+# driver: Custom IPAM driver, instead of the default.
+# config: A list with zero or more config blocks, each containing any of the following keys:
+# subnet: Subnet in CIDR format that represents a network segment
+# A full example:
+
+# ipam:
+#   driver: default
+#   config:
+#     - subnet: 172.28.0.0/16
+# Note: Additional IPAM configurations, such as gateway, are only honored for version 2 at the moment.
+
+# - ./srv/executor/data:/home/dev/data
+# - ./srv/executor/code:/home/dev/code
+# workflow-manager:
+#   build: .
+#   working_dir: /home/node/app
+#   environment:
+#     - NODE_ENV=development
+#   volumes:
+#     - ./:/home/node/app
+#   ports:
+#     - "8080:8080"
+#   depends_on:
+#     - redis
+#     - gitlab
+#     - minio
+#     - executor
+#   command: "yarn dev"
+# gitlab-runner:
+#   image: gitlab/gitlab-runner:alpine
+#   volumes:
+#     - ./srv/gitlab-runner:/etc/gitlab-runner
+# gitlab:
+#   image: gitlab/gitlab-ce
+#   restart: always
+#   hostname: 'gitlab.example.com'
+#   ports:
+#     - "30022:22"
+#     - "30080:80"
+#     - "30443:443"
+#   volumes:
+#     - ./srv/gitlab/data:/var/opt/gitlab
+#     - ./srv/gitlab/logs:/var/log/gitlab
+#     - ./srv/gitlab/config:/etc/gitlab
+# minio:
+#   image: minio/minio
+#   environment:
+#     - MINIO_ACCESS_KEY=devaccesskey
+#     - MINIO_SECRET_KEY=devsecretkey
+#   ports:
+#     - "9000:9000"
+#   volumes:
+#     - ./srv/minio/data:/data
+#     - ./srv/minio/config:/root/.minio
+#   command: server /data 
+# redis:
+#   image: redis
+#   ports:
+#     - "36379:6379"
+#   volumes:
+#     - ./srv/redis/data:/data
