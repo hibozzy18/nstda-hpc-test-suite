@@ -6,10 +6,12 @@
       get_checksum: true
       checksum_algorithm: 'md5'
       path: ./Dockerfile
-    register: Dockerfile
-  - name: create /etc/hosts file
-    template: src=./bootstrap/templates/etc/hosts.j2 dest=./bootstrap/etc/hosts
-    delegate_to: localhost
+    register: BaseDockerfile
+  - stat:
+      get_checksum: true
+      checksum_algorithm: 'md5'
+      path: ./tests/Dockerfile
+    register: AdminDockerfile
   - name: create docker-compose.yml file
     template: src=./bootstrap/templates/docker-compose.yml.j2 dest=./docker-compose.yml
     delegate_to: localhost

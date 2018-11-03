@@ -3,13 +3,17 @@
 ansible_user: ansible
 ntpserver: 192.168.1.2
 interface_types: 
-  - if_1g_ipv4
-  - if_ib_ipv4
+  - imm
+  - ens0
+  - ib
 subnets:
+  - name: management
+    subnet: 172.22.0.0/16
   - name: private_1g
     subnet: 172.21.0.0/16
   - name: private_ib
     subnet: 172.20.0.0/16
 interface_to_subnet:
-  if_1g_ipv4: private_1g
-  if_ib_ipv4: private_ib
+  ens0: private_1g
+  ib: private_ib
+  imm: management

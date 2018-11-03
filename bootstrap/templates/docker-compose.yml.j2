@@ -8,11 +8,14 @@
 x-extra_hosts:
   &cluster-hosts
 {% for host in groups['all'] %}
+{% if host != 'localhost' %}
+  - "{{ host }}:{{ hostvars[host]['ansible_host'] }}"
 {% for interface_type in interface_types %}
 {% if interface_type in hostvars[host] %}
-  - "{{ host }}:{{ hostvars[host][interface_type] }}"
+  - "{{ host }}-{{ interface_type }}:{{ hostvars[host][interface_type] }}"
 {% endif %}
 {% endfor %}
+{% endif %}
 {% endfor %}
 
 version: "3.6"
@@ -23,7 +26,7 @@ services:
     container_name: {{ host }}
     hostname: {{ host }}
     build: .
-    image: clean-centos7:{{ Dockerfile.stat.checksum }}
+    image: centos7-base:{{ BaseDockerfile.stat.checksum }}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
@@ -35,6 +38,27 @@ services:
         ipv4_address: {{ hostvars[host][interface] }}
 {% endif %}
 {% endfor %}
+{% endif %}
+{% endfor %}
+  admin:
+    container_name: admin
+    hostname: admin
+    build:
+      context: ./tests
+      args:
+        HASH_VERSION: {{ BaseDockerfile.stat.checksum }}
+    image: admin:{{ AdminDockerfile.stat.checksum }}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    ports:
+      - "22222:22"
+    privileged: true
+    networks:
+      management:
+    depends_on:
+{% for host in groups['all'] %}
+{% if host != 'localhost' %}
+        - {{ host }}
 {% endif %}
 {% endfor %}
 networks:

@@ -1,0 +1,9 @@
+ARG  HASH_VERSION
+
+# locally built image
+FROM centos7-base:${HASH_VERSION}
+
+ENV ADMIN_VERSION=0.0.1
+
+RUN echo "$ADMIN_VERSION" >> ADMIN_VERSION && \
+  chmod 444 VERSION
