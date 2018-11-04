@@ -46,8 +46,8 @@ All in One repo, docker-compose style local development environment, ansible bas
   ```
   thaisc --help
   ```
-  ```
-  thaisc [-h|--help] [-i|--inventory play] -- thaisc deploy/test suite, ansible-playbook command wrapper
+```
+thaisc [-h|--help] [-i|--inventory play] -- thaisc deploy/test suite, ansible-playbook command wrapper
 most of time, we run implement/test play inside admin container. and for generate/up/clean/admin run on host machine.
 this script was created from my frequently used cmd. (Krittin Phornsiricharoenphant, oatkrittin@gmail.com)
 (Required: ansible)
@@ -64,7 +64,7 @@ where:
                           It may prune all other existing/running project network/container/images
                           to get a clean environment.
         admin(subcmd)   - alias for > docker exec -it admin /bin/bash
- ```
+```
 
 ### Contact
   - Krittin Phornsiricharoenphant, oatkrittin@gmail.com
