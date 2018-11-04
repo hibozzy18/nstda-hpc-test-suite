@@ -12,7 +12,7 @@ All in One repo, docker-compose style local development environment, ansible bas
 - Docker for Mac / Docker for Windows: [Official site](https://www.docker.com/products/docker-desktop)
 - Git: follow Installation guide from [bitbucket tutorial](https://www.atlassian.com/git/tutorials/install-git) or [main site](https://git-scm.com/downloads)
 - Ansible: Install via pip from [Official site](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#latest-releases-via-pip)
-### Usage (Exploration & Investigation mode)
+### Usage (Developing Test & Implement Loop)
 - Clone this repository to your machine, export path for availability of `thaisc` command
   ```
   git clone https://github.com/sinonkt/nstda-hpc-test-suite.git
