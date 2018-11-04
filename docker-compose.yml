@@ -7,28 +7,6 @@
 # common hosts to extend to /etc/hosts, have to extend through extra_hosts field only.
 x-extra_hosts:
   &cluster-hosts
-  - "tara-dgx1-001:172.22.31.1"
-  - "tara-dgx1-001-imm:172.22.31.1"
-  - "tara-dgx1-001-ens0:172.21.31.1"
-  - "tara-dgx1-001-ib:172.20.31.1"
-  - "tara-dgx1-002:172.22.31.2"
-  - "tara-dgx1-002-imm:172.22.31.2"
-  - "tara-dgx1-002-ens0:172.21.31.2"
-  - "tara-dgx1-002-ib:172.20.31.2"
-  - "tara-m-001:172.22.20.1"
-  - "tara-m-001-imm:172.22.20.1"
-  - "tara-m-001-ens0:172.21.20.1"
-  - "tara-m-001-ib:172.20.20.1"
-  - "tara-m-002:172.22.20.2"
-  - "tara-m-002-imm:172.22.20.2"
-  - "tara-m-002-ens0:172.21.20.2"
-  - "tara-m-002-ib:172.20.20.2"
-  - "nfs:172.22.5.1"
-  - "nfs-imm:172.22.5.1"
-  - "nfs-ib:172.20.5.1"
-  - "mysql-1:172.22.5.5"
-  - "mysql-1-imm:172.22.5.5"
-  - "mysql-1-ens0:172.21.5.5"
   - "slurmctld-1:172.22.5.3"
   - "slurmctld-1-imm:172.22.5.3"
   - "slurmctld-1-ens0:172.21.5.3"
@@ -56,111 +34,41 @@ x-extra_hosts:
   - "tara-c-006-imm:172.22.10.6"
   - "tara-c-006-ens0:172.21.10.6"
   - "tara-c-006-ib:172.20.10.6"
-  - "freeipa:172.22.5.2"
-  - "freeipa-imm:172.22.5.2"
-  - "freeipa-ens0:172.21.5.2"
+  - "mysql-1:172.22.5.5"
+  - "mysql-1-imm:172.22.5.5"
+  - "mysql-1-ens0:172.21.5.5"
+  - "tara-dgx1-001:172.22.31.1"
+  - "tara-dgx1-001-imm:172.22.31.1"
+  - "tara-dgx1-001-ens0:172.21.31.1"
+  - "tara-dgx1-001-ib:172.20.31.1"
+  - "tara-dgx1-002:172.22.31.2"
+  - "tara-dgx1-002-imm:172.22.31.2"
+  - "tara-dgx1-002-ens0:172.21.31.2"
+  - "tara-dgx1-002-ib:172.20.31.2"
+  - "nfs:172.22.5.1"
+  - "nfs-imm:172.22.5.1"
+  - "nfs-ib:172.20.5.1"
   - "tara-frontend-1:172.22.1.2"
   - "tara-frontend-1-imm:172.22.1.2"
   - "tara-frontend-1-ens0:172.21.1.2"
   - "tara-frontend-1-ib:172.20.1.2"
+  - "tara-m-001:172.22.20.1"
+  - "tara-m-001-imm:172.22.20.1"
+  - "tara-m-001-ens0:172.21.20.1"
+  - "tara-m-001-ib:172.20.20.1"
+  - "tara-m-002:172.22.20.2"
+  - "tara-m-002-imm:172.22.20.2"
+  - "tara-m-002-ens0:172.21.20.2"
+  - "tara-m-002-ib:172.20.20.2"
+  - "freeipa:172.22.5.2"
+  - "freeipa-imm:172.22.5.2"
+  - "freeipa-ens0:172.21.5.2"
   - "slurmdbd-1:172.22.5.4"
   - "slurmdbd-1-imm:172.22.5.4"
   - "slurmdbd-1-ens0:172.21.5.4"
 
 version: "3.6"
 services:
-  tara-dgx1-001:
-    container_name: tara-dgx1-001
-    hostname: tara-dgx1-001
-    build: .
-    image: centos7-base:208a00a81577d7685cef0a629fa88467
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    extra_hosts: *cluster-hosts
-    networks:
-      management:
-        ipv4_address: 172.22.31.1
-      private_1g:
-        ipv4_address: 172.21.31.1
-      private_ib:
-        ipv4_address: 172.20.31.1
-  tara-dgx1-002:
-    container_name: tara-dgx1-002
-    hostname: tara-dgx1-002
-    build: .
-    image: centos7-base:208a00a81577d7685cef0a629fa88467
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    extra_hosts: *cluster-hosts
-    networks:
-      management:
-        ipv4_address: 172.22.31.2
-      private_1g:
-        ipv4_address: 172.21.31.2
-      private_ib:
-        ipv4_address: 172.20.31.2
-  tara-m-001:
-    container_name: tara-m-001
-    hostname: tara-m-001
-    build: .
-    image: centos7-base:208a00a81577d7685cef0a629fa88467
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    extra_hosts: *cluster-hosts
-    networks:
-      management:
-        ipv4_address: 172.22.20.1
-      private_1g:
-        ipv4_address: 172.21.20.1
-      private_ib:
-        ipv4_address: 172.20.20.1
-  tara-m-002:
-    container_name: tara-m-002
-    hostname: tara-m-002
-    build: .
-    image: centos7-base:208a00a81577d7685cef0a629fa88467
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    extra_hosts: *cluster-hosts
-    networks:
-      management:
-        ipv4_address: 172.22.20.2
-      private_1g:
-        ipv4_address: 172.21.20.2
-      private_ib:
-        ipv4_address: 172.20.20.2
-  nfs:
-    container_name: nfs
-    hostname: nfs
-    build: .
-    image: centos7-base:208a00a81577d7685cef0a629fa88467
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    extra_hosts: *cluster-hosts
-    networks:
-      management:
-        ipv4_address: 172.22.5.1
-      private_ib:
-        ipv4_address: 172.20.5.1
-  mysql-1:
-    container_name: mysql-1
-    hostname: mysql-1
-    build: .
-    image: centos7-base:208a00a81577d7685cef0a629fa88467
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    extra_hosts: *cluster-hosts
-    networks:
-      management:
-        ipv4_address: 172.22.5.5
-      private_1g:
-        ipv4_address: 172.21.5.5
   slurmctld-1:
     container_name: slurmctld-1
     hostname: slurmctld-1
@@ -271,9 +179,9 @@ services:
         ipv4_address: 172.21.10.6
       private_ib:
         ipv4_address: 172.20.10.6
-  freeipa:
-    container_name: freeipa
-    hostname: freeipa
+  mysql-1:
+    container_name: mysql-1
+    hostname: mysql-1
     build: .
     image: centos7-base:208a00a81577d7685cef0a629fa88467
     volumes:
@@ -282,9 +190,55 @@ services:
     extra_hosts: *cluster-hosts
     networks:
       management:
-        ipv4_address: 172.22.5.2
+        ipv4_address: 172.22.5.5
       private_1g:
-        ipv4_address: 172.21.5.2
+        ipv4_address: 172.21.5.5
+  tara-dgx1-001:
+    container_name: tara-dgx1-001
+    hostname: tara-dgx1-001
+    build: .
+    image: centos7-base:208a00a81577d7685cef0a629fa88467
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      management:
+        ipv4_address: 172.22.31.1
+      private_1g:
+        ipv4_address: 172.21.31.1
+      private_ib:
+        ipv4_address: 172.20.31.1
+  tara-dgx1-002:
+    container_name: tara-dgx1-002
+    hostname: tara-dgx1-002
+    build: .
+    image: centos7-base:208a00a81577d7685cef0a629fa88467
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      management:
+        ipv4_address: 172.22.31.2
+      private_1g:
+        ipv4_address: 172.21.31.2
+      private_ib:
+        ipv4_address: 172.20.31.2
+  nfs:
+    container_name: nfs
+    hostname: nfs
+    build: .
+    image: centos7-base:208a00a81577d7685cef0a629fa88467
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      management:
+        ipv4_address: 172.22.5.1
+      private_ib:
+        ipv4_address: 172.20.5.1
   tara-frontend-1:
     container_name: tara-frontend-1
     hostname: tara-frontend-1
@@ -301,6 +255,52 @@ services:
         ipv4_address: 172.21.1.2
       private_ib:
         ipv4_address: 172.20.1.2
+  tara-m-001:
+    container_name: tara-m-001
+    hostname: tara-m-001
+    build: .
+    image: centos7-base:208a00a81577d7685cef0a629fa88467
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      management:
+        ipv4_address: 172.22.20.1
+      private_1g:
+        ipv4_address: 172.21.20.1
+      private_ib:
+        ipv4_address: 172.20.20.1
+  tara-m-002:
+    container_name: tara-m-002
+    hostname: tara-m-002
+    build: .
+    image: centos7-base:208a00a81577d7685cef0a629fa88467
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      management:
+        ipv4_address: 172.22.20.2
+      private_1g:
+        ipv4_address: 172.21.20.2
+      private_ib:
+        ipv4_address: 172.20.20.2
+  freeipa:
+    container_name: freeipa
+    hostname: freeipa
+    build: .
+    image: centos7-base:208a00a81577d7685cef0a629fa88467
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    extra_hosts: *cluster-hosts
+    networks:
+      management:
+        ipv4_address: 172.22.5.2
+      private_1g:
+        ipv4_address: 172.21.5.2
   slurmdbd-1:
     container_name: slurmdbd-1
     hostname: slurmdbd-1
@@ -322,21 +322,14 @@ services:
       context: ./tests
       args:
         HASH_VERSION: 208a00a81577d7685cef0a629fa88467
-    image: admin:8133356b16d89caed6e3f430b4c94279
+    image: admin:4104c6416d92996d44e05b221086c88d
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    ports:
-      - "22222:22"
+      - .:/home/ansible/src
     privileged: true
     networks:
       management:
     depends_on:
-        - tara-dgx1-001
-        - tara-dgx1-002
-        - tara-m-001
-        - tara-m-002
-        - nfs
-        - mysql-1
         - slurmctld-1
         - tara-c-001
         - tara-c-002
@@ -344,8 +337,14 @@ services:
         - tara-c-004
         - tara-c-005
         - tara-c-006
-        - freeipa
+        - mysql-1
+        - tara-dgx1-001
+        - tara-dgx1-002
+        - nfs
         - tara-frontend-1
+        - tara-m-001
+        - tara-m-002
+        - freeipa
         - slurmdbd-1
 networks:
   management:

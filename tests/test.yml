@@ -1,17 +1,23 @@
 ---
+# This playbook tests all aspects of any working slurm deployments. 
+# both development(docker-compose), production(VM, baremetal)
+
 - hosts: localhost
   gather_facts: false
   tasks:
-  - name: just ls
-    shell: /bin/ls -al
   - name: "Check ansible version !=2.7.0"
     assert:
       msg: "Ansible V2.7.0 can't be used until: https://github.com/ansible/ansible/issues/46600 is fixed"
       that:
         - ansible_version.string is version("2.7.0", "!=")
         - ansible_version.string is version("2.5.0", ">=")
-    tags:
-      - check
+
+- hosts: "{{ groups['all'] | difference(['localhost']) }}"
+  gather_facts: false
+  name: Check common packages and services to all nodes
+  remote_user: ansible
+  roles:
+    - common
 #     name: httpd
 #     state: latest
 # - name: write the apache config file

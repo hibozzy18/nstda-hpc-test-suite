@@ -3,7 +3,22 @@ ARG  HASH_VERSION
 # locally built image
 FROM centos7-base:${HASH_VERSION}
 
-ENV ADMIN_VERSION=0.0.1
+ENV ADMIN_VERSION=0.0.2
+ENV PATH=/home/ansible/src/bin:$PATH
+
+# Install pip, ansible
+RUN curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py" && \
+  python get-pip.py && \
+  pip install ansible
 
 RUN echo "$ADMIN_VERSION" >> ADMIN_VERSION && \
   chmod 444 VERSION
+
+# Switch to ansible user mount cwd code to /home/ansible/src
+USER ansible
+
+RUN mkdir -p /home/ansible/src
+
+WORKDIR /home/ansible/src
+
+VOLUME [ "/home/ansible/src" ]

@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+
+# Credit https://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within
+ROOT_DIR=$(realpath "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"/..)
+usage="$(basename "$0") [-h|--help] [-i|--inventory play] -- thaisc deploy/test suite, ansible-playbook command wrapper
+most of time, we run implement/test play inside admin container. and for generate/up/clean/admin run on host machine.
+this script was created from my frequently used cmd. (Krittin Phornsiricharoenphant, oatkrittin@gmail.com)
+(Required: ansible)
+
+where:
+    -h, --help        show usage info.
+    -i, --inventory   inventory to run at, which available in inventories/* dir. (default=local)
+    play | subcmd     playbook which available on this thaisc project.
+        generate(play)  - to generate docker-compose.yml for further use while locally developing.
+        implement(play) - to automate deploy, which make changes on inventory you provided.
+        test(play)      - Ansible Dry-run, focus on testing only, no changes will be made from this run.
+        up(subcmd)      - Generate docker-compose.yml then run docker-compose up.
+        clean(subcmd)   - (Caution!) actually this subcmd run set of docker cmd to clean containers.
+                          It may prune all other existing/running project network/container/images
+                          to get a clean environment.
+        admin(subcmd)   - alias for > docker exec -it admin /bin/bash
+"
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+    -h|--help)
+       echo "$usage"
+       exit
+       ;;
+    -i|--inventory)
+    ENV="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    *)    # unknown option
+    POSITIONAL+=("$1") # save it in an array for later
+    shift # past argument
+    ;;
+esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
+if [[ -n $1 ]]; then
+  PLAY="$1"
+  INVENTORY=${INVENTORY:=local}
+  case $PLAY in
+    test|tests/test.yml)
+    ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini --check ${ROOT_DIR}/tests/test.yml
+    ;;
+    generate|generate.yml)
+    ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini ${ROOT_DIR}/generate.yml
+    ;;
+    implement|implement.yml)
+    ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini ${ROOT_DIR}/implement.yml
+    ;;
+    up)
+    ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini ${ROOT_DIR}/generate.yml
+    docker-compose up
+    ;;
+    clean)
+    docker kill $(docker ps -q)
+    docker network prune
+    docker container prune
+    docker images prune
+    ;;
+    admin)
+    docker exec -it admin /bin/bash
+    ;;
+    *)
+    ;;
+  esac
+fi

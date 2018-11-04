@@ -50,8 +50,7 @@ services:
     image: admin:{{ AdminDockerfile.stat.checksum }}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    ports:
-      - "22222:22"
+      - .:/home/ansible/src
     privileged: true
     networks:
       management:

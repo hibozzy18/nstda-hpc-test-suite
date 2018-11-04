@@ -1,0 +1,21 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+
+- name: ensure all common packages are installed
+  yum: 
+    name:
+    - openssh
+    - openssh-server
+    - ntp
+    state: present
+  check_mode: yes
+
+- name: ensure that common services are started
+  systemd:
+    name: "{{ item }}"
+    state: started 
+    enabled: yes
+  with_items:
+    - sshd
+    - ntp
+  check_mode: yes

@@ -19,6 +19,17 @@
   register: sestatus
   changed_when: false
 
+---
 - include: install_httpd.yml
 - include: copy_code.yml
+
+
+- name: insert iptables rule for httpd
+  lineinfile: dest=/etc/sysconfig/iptables create=yes state=present regexp="{{ httpd_port }}" insertafter="^:OUTPUT "
+              line="-A INPUT -p tcp  --dport {{ httpd_port }} -j  ACCEPT"
+  notify: restart iptables
+
+  - name: Configure SELinux to allow httpd to connect to remote database
+  seboolean: name=httpd_can_network_connect_db state=true persistent=yes
+  when: sestatus.rc != 0
 
