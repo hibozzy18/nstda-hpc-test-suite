@@ -42,6 +42,29 @@ All in One repo, docker-compose style local development environment, ansible bas
   ```
   thaisc clean
   ```
+- get usage
+  ```
+  thaisc --help
+  ```
+  ```
+  thaisc [-h|--help] [-i|--inventory play] -- thaisc deploy/test suite, ansible-playbook command wrapper
+most of time, we run implement/test play inside admin container. and for generate/up/clean/admin run on host machine.
+this script was created from my frequently used cmd. (Krittin Phornsiricharoenphant, oatkrittin@gmail.com)
+(Required: ansible)
+
+where:
+    -h, --help        show usage info.
+    -i, --inventory   inventory to run at, which available in inventories/* dir. (default=local)
+    play | subcmd     playbook which available on this thaisc project.
+        generate(play)  - to generate docker-compose.yml for further use while locally developing.
+        implement(play) - to automate deploy, which make changes on inventory you provided.
+        test(play)      - Ansible Dry-run, focus on testing only, no changes will be made from this run.
+        up(subcmd)      - Generate docker-compose.yml then run docker-compose up.
+        clean(subcmd)   - (Caution!) actually this subcmd run set of docker cmd to clean containers.
+                          It may prune all other existing/running project network/container/images
+                          to get a clean environment.
+        admin(subcmd)   - alias for > docker exec -it admin /bin/bash
+ ```
 
 ### Contact
   - Krittin Phornsiricharoenphant, oatkrittin@gmail.com
