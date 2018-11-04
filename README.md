@@ -1,11 +1,11 @@
 # nstda-hpc-test-suite (ThaiSC)
 All in One repo, docker-compose style local development environment, ansible based integration deploy/tests.
 ### Principal Designs
-- Single source of truth about hosts & topology info (inventory): Imitate real production topology as much as we can
+- `Single source of truth` about `Hosts & Topology` info (inventory): Imitate real production topology as much as we can
                                                                   to reduce error at runtime.
-- Stick with Conatainerized Technology: for convenient while developing both deploy/testing script in automated fashion.
+- Stick with `Conatainerized Technology`: for convenient while developing both deploy/testing script in automated fashion.
                                          easily to redeploy all.
-- Encourage Test Drivent Development(TDD): to simplify & automated `test` & `implement` loop as code over ThaiSC 
+- Encourage `Test Drivent Development(TDD)`: to simplify & automated `test` & `implement` loop as code over ThaiSC 
                                            Slurm-HPC cluster deployment.
 
 ### Prerequisite
