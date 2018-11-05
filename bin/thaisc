@@ -2,14 +2,15 @@
 
 # Credit https://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within
 ROOT_DIR=$(realpath "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"/..)
-usage="$(basename "$0") [-h|--help] [-i|--inventory play] -- thaisc deploy/test suite, ansible-playbook command wrapper
+usage="$(basename "$0") [-h|--help] [-e|--environment -i|--implement play] -- thaisc deploy/test suite, ansible-playbook command wrapper
 most of time, we run implement/test play inside admin container. and for generate/up/clean/admin run on host machine.
 this script was created from my frequently used cmd. (Krittin Phornsiricharoenphant, oatkrittin@gmail.com)
 (Required: ansible)
 
 where:
     -h, --help        show usage info.
-    -i, --inventory   inventory to run at, which available in inventories/* dir. (default=local)
+    -e, --environment inventory to run at, which available in inventories/* dir. (default=local)
+    -i, --implement   either docker or ansible, (default=docker)
     play | subcmd     playbook which available on this thaisc project.
         generate(play)  - to generate docker-compose.yml for further use while locally developing.
         implement(play) - to automate deploy, which make changes on inventory you provided.
@@ -19,8 +20,6 @@ where:
                           It may prune all other existing/running project network/container/images
                           to get a clean environment.
         admin(subcmd)   - alias for > docker exec -it admin /bin/bash
-    implementation    either `docker` or `ansible`, default to `ansible`
-
 "
 
 POSITIONAL=()
@@ -33,11 +32,16 @@ case $key in
        echo "$usage"
        exit
        ;;
-    -i|--inventory)
-    ENV="$2"
-    shift # past argument
-    shift # past value
-    ;;
+    -e|--environment)
+      ENV="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -i|--implement)
+      IMPLEMENTATION="$2"
+      shift # past argument
+      shift # past value
+      ;;
     *)    # unknown option
     POSITIONAL+=("$1") # save it in an array for later
     shift # past argument
@@ -48,8 +52,7 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 
 if [[ -n $1 ]]; then
   PLAY="$1"
-  INVENTORY=${INVENTORY:=local}
-  IMPLEMENTATION="${2}"
+  INVENTORY=${ENV:=local}
   IMPLEMENTATION=${IMPLEMENTATION:=docker}
   case $PLAY in
     test|tests/test.yml)
