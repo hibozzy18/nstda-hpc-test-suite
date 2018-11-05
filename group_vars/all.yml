@@ -25,7 +25,7 @@ implementation:
       freeipa:
         image: freeipa/freeipa-server:latest
       frontend: 
-        image: sinonkt/frontend:latest
+        image: sinonkt/docker-slurmfe:latest
       slurmctld:
         image: sinonkt/docker-slurmctld:latest
       slurmdbd:

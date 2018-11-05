@@ -28,6 +28,7 @@ services:
     image: {{ implementation.docker.config_by_group[group].image }}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - bootstrap/etc/slurm:/etc/slurm
     privileged: true
     extra_hosts: *cluster-hosts
     networks:
