@@ -1,6 +1,6 @@
 # nstda-hpc-test-suite (ThaiSC)
 All in One repo, docker-compose style local development environment, ansible based integration deploy/tests.
-### Principal Designs
+### Design Principles 
 - <b>Single source of truth</b> about <b>Hosts & Topology</b> info (inventory): Imitate real production topology as much as we can
                                                                   to reduce error at runtime.
 - Stick with <b>Conatainerized Technology</b>: for convenient while developing both deploy/testing script in automated fashion.
