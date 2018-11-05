@@ -21,7 +21,7 @@ All in One repo, docker-compose style local development environment, ansible bas
   ```
 - Create cluster from exsiting inventory(default=local) & code. (all inventory available stay inside `inventories/*` 
   ```
-  thaisc up               # you can specify which inventory by `thaisc -i stagging up`
+  thaisc up               # you can specify which inventory by `thaisc -e stagging -i ansible up`
   ```
 - Then Every single node in cluster was spawned as container. we can exec into `admin` node where have `ansible` installed & this project codes inside this container.
   ```
@@ -47,14 +47,15 @@ All in One repo, docker-compose style local development environment, ansible bas
   thaisc --help
   ```
 ```
-thaisc [-h|--help] [-i|--inventory play] -- thaisc deploy/test suite, ansible-playbook command wrapper
+thaisc [-h|--help] [-e|--environment -i|--implement play] -- thaisc deploy/test suite, ansible-playbook command wrapper
 most of time, we run implement/test play inside admin container. and for generate/up/clean/admin run on host machine.
 this script was created from my frequently used cmd. (Krittin Phornsiricharoenphant, oatkrittin@gmail.com)
 (Required: ansible)
 
 where:
     -h, --help        show usage info.
-    -i, --inventory   inventory to run at, which available in inventories/* dir. (default=local)
+    -e, --environment inventory to run at, which available in inventories/* dir. (default=local)
+    -i, --implement   either docker or ansible, (default=docker)
     play | subcmd     playbook which available on this thaisc project.
         generate(play)  - to generate docker-compose.yml for further use while locally developing.
         implement(play) - to automate deploy, which make changes on inventory you provided.
