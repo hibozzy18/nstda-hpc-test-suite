@@ -18,3 +18,26 @@ interface_to_subnet:
   ens0: private_1g
   ib: private_ib
   imm: management
+implementation:
+  docker:
+    implemented_group: ['freeipa', 'frontend', 'slurmctld', 'slurmdbd', 'compute', 'memory', 'dgx', 'dbs', 'gpfs']
+    config_by_group:
+      freeipa:
+        image: freeipa/freeipa-server:latest
+      frontend: 
+        image: sinonkt/frontend:latest
+      slurmctld:
+        image: sinonkt/docker-slurmctld:latest
+      slurmdbd:
+        image: sinonkt/docker-slurmdbd:latest
+      compute:
+        image: sinonkt/docker-slurmd:latest
+      memory:
+        image: sinonkt/docker-slurmd:latest
+      dgx:
+        image: sinonkt/docker-slurmd:latest
+      dbs:
+        image: mariadb:latest
+      gpfs:
+        image: itsthenetwork/nfs-server-alpine:latest
+  ansible:

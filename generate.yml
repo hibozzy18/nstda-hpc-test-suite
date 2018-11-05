@@ -1,5 +1,5 @@
 ---
-- hosts: local
+- hosts: localhost
   gather_facts: false
   tasks:
   - stat:
@@ -13,5 +13,5 @@
       path: ./tests/Dockerfile
     register: AdminDockerfile
   - name: create docker-compose.yml file
-    template: src=./bootstrap/templates/docker-compose.yml.j2 dest=./docker-compose.yml
+    template: src="./bootstrap/templates/docker-compose.{{ slurm_implementation }}.yml.j2" dest=./docker-compose.yml
     delegate_to: localhost
