@@ -7,6 +7,7 @@
   tasks:
   - name: Test can ls all machine
     shell: /bin/ls
+    check_mode: no
 
 - hosts: localhost
   gather_facts: false
@@ -68,6 +69,7 @@
   - name: Test srun -N 48 hostname
     shell: srun -N 48 hostname
     register: hostlist_result
+    check_mode: no
 
 - hosts: "{{ groups['all'] | difference(['localhost', 'mysql-1', 'nfs', 'freeipa-1']) }}"
   gather_facts: false
