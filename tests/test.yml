@@ -12,26 +12,57 @@
         - ansible_version.string is version("2.7.0", "!=")
         - ansible_version.string is version("2.5.0", ">=")
 
-- hosts: "{{ groups['all'] | difference(['localhost']) }}"
+- hosts: "{{ groups['all'] | difference(['localhost', 'mysql-1', 'nfs', 'freeipa-1']) }}"
   gather_facts: false
-  name: Check common packages and services to all nodes
+  name: Check common/slurm_common packages and services to all nodes
   remote_user: ansible
   roles:
     - common
-#     name: httpd
-#     state: latest
-# - name: write the apache config file
-#   template:
-#     src: /srv/httpd.j2
-#     dest: /etc/httpd.conf
-#   notify:
-#   - restart apache
-# - name: ensure apache is running
-#   service:
-#     name: httpd
-#     state: started
-# handlers:
-#   - name: restart apache
-#     service:
-#       name: httpd
-#       state: restarted
+    - slurm_common
+  tasks:
+  - name: Check that the somefile.conf exists
+    stat:
+      path: /gpfs/test.txt
+    register: file_result
+    assert:
+        msg: "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
+        that:
+          - file_result.exists
+
+
+
+- hosts: slurmctld
+  gather_facts: false
+  name: Check all slurmctcld (Head node) nodes are running
+  remote_user: ansible
+  tasks:
+  - name: ensure that slurmctld service are started
+    systemd:
+        name: "slurmctld"
+        state: started 
+        enabled: yes
+    check_mode: yes
+
+- hosts: slurmdbd
+  gather_facts: false
+  name: Check all slurmdbd node are running
+  remote_user: ansible
+  tasks:
+  - name: ensure that slurmdbd service are started
+    systemd:
+        name: "slurmctld"
+        state: started 
+        enabled: yes
+    check_mode: yes
+
+- hosts: computes
+  gather_facts: false
+  name: Check all slurmd (Computes) nodes are running
+  remote_user: ansible
+  tasks:
+  - name: ensure that slurmd service are started
+    systemd:
+        name: "slurmd"
+        state: started 
+        enabled: yes
+    check_mode: yes

@@ -8,9 +8,7 @@ RUN useradd -u 999 -ms /bin/bash ansible && \
     mkdir -p /home/ansible/.ssh
 
 # Add .ssh and correct permissions.
-ADD bootstrap/ansible/.ssh/dev /home/ansible/.ssh/id_rsa
-ADD bootstrap/ansible/.ssh/dev.pub /home/ansible/.ssh/id_rsa.pub
-ADD bootstrap/ansible/.ssh/authorized_keys /home/ansible/.ssh/authorized_keys
+ADD bootstrap/ansible/.ssh /home/ansible/.ssh
 RUN chown -R ansible:wheel /home/ansible/.ssh/ && \
     chmod 700 /home/ansible/.ssh && \
     chmod 644 /home/ansible/.ssh/* && \

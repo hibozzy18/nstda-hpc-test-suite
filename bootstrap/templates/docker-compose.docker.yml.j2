@@ -34,6 +34,7 @@ services:
 {% endif %}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./bootstrap/gpfs:/gpfs
 {% if group in ['slurmctld', 'slurmdbd', 'compute', 'memory', 'dgx'] %}
       - {{ implementation.docker.slurm_conf_loc }}:/etc/slurm 
 {% endif %}

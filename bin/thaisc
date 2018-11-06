@@ -42,6 +42,10 @@ case $key in
       shift # past argument
       shift # past value
       ;;
+    -v|--verbose|-vvv)
+      ANSIBLE_VERBOSE="$1"
+      shift # past flag
+      ;;
     *)    # unknown option
     POSITIONAL+=("$1") # save it in an array for later
     shift # past argument
@@ -56,14 +60,14 @@ if [[ -n $1 ]]; then
   IMPLEMENTATION=${IMPLEMENTATION:=docker}
   case $PLAY in
     test|tests/test.yml)
-    ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini --check ${ROOT_DIR}/tests/test.yml
+    ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini --check ${ROOT_DIR}/tests/test.yml $ANSIBLE_VERBOSE
     ;;
     generate|generate.yml)
     docker build -t centos7-base .
     ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini ${ROOT_DIR}/generate.yml --extra-vars "slurm_implementation=$IMPLEMENTATION"
     ;;
     implement|implement.yml)
-    ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini ${ROOT_DIR}/implement.yml
+    ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini ${ROOT_DIR}/implement.yml $ANSIBLE_VERBOSE
     ;;
     up)
     docker build -t centos7-base .

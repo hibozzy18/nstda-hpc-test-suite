@@ -1,6 +1,9 @@
 #### joe made this: http://goel.io/joe
 
 #### Custom ####
+bootstrap/mysql
+bootstrap/freeipa
+
 docker-compose.yml
 
 #### ansible ####
