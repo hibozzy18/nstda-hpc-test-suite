@@ -59,12 +59,14 @@ if [[ -n $1 ]]; then
     ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini --check ${ROOT_DIR}/tests/test.yml
     ;;
     generate|generate.yml)
+    docker build -t centos7-base .
     ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini ${ROOT_DIR}/generate.yml --extra-vars "slurm_implementation=$IMPLEMENTATION"
     ;;
     implement|implement.yml)
     ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini ${ROOT_DIR}/implement.yml
     ;;
     up)
+    docker build -t centos7-base .
     ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini ${ROOT_DIR}/generate.yml --extra-vars "slurm_implementation=$IMPLEMENTATION"
     docker-compose up
     ;;

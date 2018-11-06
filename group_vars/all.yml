@@ -20,10 +20,17 @@ interface_to_subnet:
   imm: management
 implementation:
   docker:
+    slurm_conf_loc: ./bootstrap/etc/slurm
     implemented_group: ['freeipa', 'frontend', 'slurmctld', 'slurmdbd', 'compute', 'memory', 'dgx', 'dbs', 'gpfs']
+    mountpoint: 
     config_by_group:
       freeipa:
         image: freeipa/freeipa-server:latest
+        environment:
+          - IPA_SERVER_IP=0.0.0.0
+          - PASSWORD=Secret123
+        volumes:
+          - ./bootstrap/freeipa:/data:Z
       frontend: 
         image: sinonkt/docker-slurmfe:latest
       slurmctld:
@@ -38,6 +45,18 @@ implementation:
         image: sinonkt/docker-slurmd:latest
       dbs:
         image: mariadb:latest
+        environment:
+          - MYSQL_ROOT_PASSWORD=slurm
+          - MYSQL_ROOT_HOST=mysql-1
+          - MYSQL_DATABASE=slurm
+          - MYSQL_USER=slurm
+          - MYSQL_PASSWORD=slurm
+        volumes:
+          - ./bootstrap/mysql:/var/lib/mysql 
       gpfs:
         image: itsthenetwork/nfs-server-alpine:latest
+        environment:
+         - SHARED_DIRECTORY=/gpfs
+        volumes:
+          - ./bootstrap/gpfs:/gpfs
   ansible:

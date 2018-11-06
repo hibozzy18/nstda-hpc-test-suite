@@ -1,6 +1,0 @@
----
-mount-point: storage.example.org
-mount-gpfs: storage.example.org
-ib-config:
-  - test:
-  - test2:

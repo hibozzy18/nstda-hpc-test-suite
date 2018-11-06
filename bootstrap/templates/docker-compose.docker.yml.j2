@@ -26,9 +26,22 @@ services:
     container_name: {{ host }}
     hostname: {{ host }}
     image: {{ implementation.docker.config_by_group[group].image }}
+{% if 'environment' in implementation.docker.config_by_group[group] %}
+    environment:
+{% for env in implementation.docker.config_by_group[group].environment %}
+      - {{ env }}
+{% endfor %}
+{% endif %}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      - bootstrap/etc/slurm:/etc/slurm
+{% if group in ['slurmctld', 'slurmdbd', 'compute', 'memory', 'dgx'] %}
+      - {{ implementation.docker.slurm_conf_loc }}:/etc/slurm 
+{% endif %}
+{% if 'volumes' in implementation.docker.config_by_group[group] %}
+{% for volume in implementation.docker.config_by_group[group].volumes %}
+      - {{ volume | quote }}
+{% endfor %}
+{% endif %}
     privileged: true
     extra_hosts: *cluster-hosts
     networks:

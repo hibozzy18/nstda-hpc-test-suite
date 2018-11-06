@@ -1,9 +1,9 @@
-ARG  HASH_VERSION
+ARG  HASH_VERSION=latest
 
 # locally built image
 FROM centos7-base:${HASH_VERSION}
 
-ENV ADMIN_VERSION=0.0.2
+ENV ADMIN_VERSION=0.0.3
 ENV PATH=/home/ansible/src/bin:$PATH
 
 # Install pip, ansible
