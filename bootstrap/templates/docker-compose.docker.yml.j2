@@ -34,7 +34,7 @@ services:
 {% endif %}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-{% if group in ['slurmctld', 'slurmdbd', 'compute', 'memory', 'dgx'] %}
+{% if group in ['frontend', 'slurmctld', 'slurmdbd', 'compute', 'memory', 'dgx'] %}
       - {{ implementation.docker.slurm_conf_loc }}:/etc/slurm 
 {% endif %}
 {% if 'volumes' in implementation.docker.config_by_group[group] %}

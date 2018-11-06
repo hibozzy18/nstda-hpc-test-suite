@@ -2,6 +2,12 @@
 # This playbook tests all aspects of any working slurm deployments. 
 # both development(docker-compose), production(VM, baremetal)
 
+- hosts: all
+  gather_facts: false
+  tasks:
+  - name: Test can ls all machine
+    shell: /bin/ls
+
 - hosts: localhost
   gather_facts: false
   tasks:
@@ -19,17 +25,6 @@
   roles:
     - common
     - slurm_common
-  tasks:
-  - name: Check that the somefile.conf exists
-    stat:
-      path: /gpfs/test.txt
-    register: file_result
-    assert:
-        msg: "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
-        that:
-          - file_result.exists
-
-
 
 - hosts: slurmctld
   gather_facts: false
@@ -66,3 +61,25 @@
         state: started 
         enabled: yes
     check_mode: yes
+
+- hosts: tara-frontend-1
+  gather_facts: false
+  tasks:
+  - name: Test srun -N 48 hostname
+    shell: srun -N 48 hostname
+    register: hostlist_result
+
+- hosts: "{{ groups['all'] | difference(['localhost', 'mysql-1', 'nfs', 'freeipa-1']) }}"
+  gather_facts: false
+  name: Check gpfs functionallity
+  remote_user: ansible
+  tasks:
+  - name: Retrieve file result from all nodes.
+    stat:
+        path: /gpfs/test.txt
+    register: file_result
+  - name:
+    assert:
+      msg: "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
+      that:
+        - file_result.stat.exists

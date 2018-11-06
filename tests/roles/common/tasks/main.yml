@@ -17,5 +17,5 @@
     enabled: yes
   with_items:
     - sshd
-    - ntp
+    - ntpd
   check_mode: yes
