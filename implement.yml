@@ -5,10 +5,10 @@
   gather_facts: false
   tasks:
   - name: just ls
-    shell: /bin/ls -al
-    register: myresult
-  - debug:
-        msg: "{{ myresult }}"
+    shell: /bin/ls
+    # register: myresult
+  # - debug:
+  #       msg: "{{ myresult }}"
 
 # - name: apply common configuration to all nodes
 #   hosts: all

@@ -3,7 +3,7 @@
 # Credit https://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within
 ROOT_DIR=$(realpath "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"/..)
 usage="$(basename "$0") [-h|--help] [-e|--environment -i|--implement play] -- thaisc deploy/test suite, ansible-playbook command wrapper
-most of time, we run implement/test play inside admin container. and for generate/up/clean/admin run on host machine.
+most of time, we run implement/test play inside admin container. and for generate/up/build/clean/admin run on host machine.
 this script was created from my frequently used cmd. (Krittin Phornsiricharoenphant, oatkrittin@gmail.com)
 (Required: ansible)
 
@@ -11,11 +11,13 @@ where:
     -h, --help        show usage info.
     -e, --environment inventory to run at, which available in inventories/* dir. (default=local)
     -i, --implement   either docker or ansible, (default=docker)
+    --save            to auto redirect test result to results/environment/*.log
     play | subcmd     playbook which available on this thaisc project.
         generate(play)  - to generate docker-compose.yml for further use while locally developing.
         implement(play) - to automate deploy, which make changes on inventory you provided.
         test(play)      - Ansible Dry-run, focus on testing only, no changes will be made from this run.
         up(subcmd)      - Generate docker-compose.yml then run docker-compose up.
+        build(subcmd)   - Build all docker images needed for docker & ansible implementation.
         clean(subcmd)   - (Caution!) actually this subcmd run set of docker cmd to clean containers.
                           It may prune all other existing/running project network/container/images
                           to get a clean environment.
@@ -46,6 +48,10 @@ case $key in
       ANSIBLE_VERBOSE="$1"
       shift # past flag
       ;;
+    --save)
+      SAVE_TEST_RESULT="$1"
+      shift
+    ;;
     *)    # unknown option
     POSITIONAL+=("$1") # save it in an array for later
     shift # past argument
@@ -60,19 +66,39 @@ if [[ -n $1 ]]; then
   IMPLEMENTATION=${IMPLEMENTATION:=docker}
   case $PLAY in
     test|tests/test.yml)
-    ansible-playbook --ssh-common-args='-o StrictHostKeyChecking=no' -i ${ROOT_DIR}/inventories/${INVENTORY}.ini --check ${ROOT_DIR}/tests/test.yml $ANSIBLE_VERBOSE
+    result_dir=$ROOT_DIR/results/${INVENTORY}
+    mkdir -p $result_dir
+    dt=$(date '+%d_%m_%Y__%H_%M_%S');
+    if [[ -n $SAVE_TEST_RESULT ]]; then
+      ansible-playbook --ssh-common-args='-o StrictHostKeyChecking=no' \
+        -i ${ROOT_DIR}/inventories/${INVENTORY}.ini \
+        --check ${ROOT_DIR}/test.yml $ANSIBLE_VERBOSE > ${result_dir}/${dt}.log
+    else
+      ansible-playbook --ssh-common-args='-o StrictHostKeyChecking=no' \
+        -i ${ROOT_DIR}/inventories/${INVENTORY}.ini \
+        --check ${ROOT_DIR}/test.yml $ANSIBLE_VERBOSE
+    fi
     ;;
     generate|generate.yml)
-    docker build -t centos7-base:$(md5 Dockerfile | cut -d " " -f4) .
+    thaisc build
     ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini ${ROOT_DIR}/generate.yml --extra-vars "slurm_implementation=$IMPLEMENTATION"
     ;;
     implement|implement.yml)
     ansible-playbook --ssh-common-args='-o StrictHostKeyChecking=no' -i ${ROOT_DIR}/inventories/${INVENTORY}.ini ${ROOT_DIR}/implement.yml $ANSIBLE_VERBOSE
     ;;
     up)
-    docker build -t centos7-base:$(md5 Dockerfile | cut -d " " -f4) .
+    thaisc build
     ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini ${ROOT_DIR}/generate.yml --extra-vars "slurm_implementation=$IMPLEMENTATION"
     docker-compose up
+    ;;
+    build)
+    docker build -t slurmbase ${ROOT_DIR}/Dockerfiles/slurmbase
+    docker build -t slurmctld ${ROOT_DIR}/Dockerfiles/slurmctld
+    docker build -t slurmdbd ${ROOT_DIR}/Dockerfiles/slurmdbd
+    docker build -t slurmd ${ROOT_DIR}/Dockerfiles/slurmd
+    docker build -t slurmfe ${ROOT_DIR}/Dockerfiles/slurmfe
+    docker build -t centos7-base ${ROOT_DIR}/Dockerfiles/centos7-base
+    docker build -t admin ${ROOT_DIR}/Dockerfiles/admin
     ;;
     clean)
     to_kill_list=$(docker ps \

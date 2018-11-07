@@ -1,0 +1,86 @@
+# {{ ansible_managed }}
+### Notes
+# need to set hostname, which is a bit repetitive, even docker-compose not resolve things on hostname
+# https://github.com/docker/compose/issues/2925
+### Docker compose, Extension field
+# https://github.com/docker/compose/issues/5783
+# common hosts to extend to /etc/hosts, have to extend through extra_hosts field only.
+x-extra_hosts:
+  &cluster-hosts
+{% for host in groups['all'] %}
+{% if host != 'localhost' %}
+  - "{{ host }}:{{ hostvars[host]['ansible_host'] }}"
+{% for interface_type in interface_types %}
+{% if interface_type in hostvars[host] %}
+  - "{{ host }}-{{ interface_type }}:{{ hostvars[host][interface_type] }}"
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+
+version: "3.6"
+services:
+{% for group in implementation.docker.implemented_group %}
+{% for host in groups[group] %}
+  {{ host }}:
+    container_name: {{ host }}
+    hostname: {{ host }}
+    image: {{ implementation.docker.config_by_group[group].image }}
+{% if 'environment' in implementation.docker.config_by_group[group] %}
+    environment:
+{% for env in implementation.docker.config_by_group[group].environment %}
+      - {{ env }}
+{% endfor %}
+{% endif %}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+{% if group in ['frontend', 'slurmctld', 'slurmdbd', 'compute', 'memory', 'dgx'] %}
+      - {{ implementation.docker.slurm_conf_loc }}:/etc/slurm 
+{% endif %}
+{% if 'volumes' in implementation.docker.config_by_group[group] %}
+{% for volume in implementation.docker.config_by_group[group].volumes %}
+      - {{ volume | quote }}
+{% endfor %}
+{% endif %}
+    privileged: true
+    extra_hosts: *cluster-hosts
+{% if 'depends_ons' in implementation.docker.config_by_group[group] %}
+    depends_on:
+{% for depends_on in implementation.docker.config_by_group[group].depends_ons %}
+      - {{ depends_on | quote }}
+{% endfor %}
+{% endif %}
+    networks:
+{% for interface in interface_types %}
+{% if interface in hostvars[host] %}
+      {{ interface_to_subnet[interface] }}:
+        ipv4_address: {{ hostvars[host][interface] }}
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endfor %}
+  admin:
+    container_name: admin
+    hostname: admin
+    image: admin:latest
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - .:/home/ansible/src
+    privileged: true
+    networks:
+      management:
+    depends_on:
+{% for host in groups['all'] %}
+{% if host != 'localhost' %}
+      - {{ host }}
+{% endif %}
+{% endfor %}
+networks:
+{% for subnet in subnets %}
+  {{ subnet.name }}:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: {{ subnet.subnet }}
+{% endfor %}

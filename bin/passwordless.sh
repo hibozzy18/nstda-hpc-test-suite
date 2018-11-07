@@ -1,0 +1,7 @@
+adduser ansible
+su - ansible
+mkdir .ssh
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXrr8peB52mBOiuEwm3hc/EL4GGaJews5aTUuUxUyFOYh0csU8dwbDtFwiRt8+9y2qm95+YiS7VDA6Rvk2kR9WcjFaWIF/iFuNLTsk9yneSeJvi/NPzdEpxhd0SqarrX1l5s1dH11dzHGO3bB1EeVORheHq3zeyDW86QE+fz9AGfv3D/+ZYkK8vzvKhGO5B5aC7gn8kX5GeAz7dZDY501T/KxI3el010T6m9lzqmcjnRH853QaRaA2JsR3QTrTH5EEnDan1xF0RixDhFckD720B+6VXObuGfW8HIirCXO8UnGD1obTRQ9XynDuj7DxfgouwnXwJVfEW4x0AdB/BJvp dev@dfbb58618d75
+" > .ssh/authorized_keys
+exit
+exit

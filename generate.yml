@@ -2,16 +2,16 @@
 - hosts: localhost
   gather_facts: false
   tasks:
-  - stat:
-      get_checksum: true
-      checksum_algorithm: 'md5'
-      path: ./Dockerfile
-    register: BaseDockerfile
-  - stat:
-      get_checksum: true
-      checksum_algorithm: 'md5'
-      path: ./tests/Dockerfile
-    register: AdminDockerfile
+  # - stat:
+  #     get_checksum: true
+  #     checksum_algorithm: 'md5'
+  #     path: ./Dockerfile
+  #   register: BaseDockerfile
+  # - stat:
+  #     get_checksum: true
+  #     checksum_algorithm: 'md5'
+  #     path: ./tests/Dockerfile
+  #   register: AdminDockerfile
   - name: create docker-compose.yml file
-    template: src="./bootstrap/templates/docker-compose.{{ slurm_implementation }}.yml.j2" dest=./docker-compose.yml
+    template: src="./templates/docker-compose.{{ slurm_implementation }}.yml.j2" dest=./docker-compose.yml
     delegate_to: localhost

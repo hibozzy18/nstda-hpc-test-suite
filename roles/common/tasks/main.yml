@@ -1,24 +1,21 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
 
-- name: Install ntp
-  yum: name=ntp state=present
-  tags: ntp
+- name: ensure all common packages are installed
+  yum: 
+    name:
+    - openssh
+    - openssh-server
+    - ntp
+    state: present
+  check_mode: yes
 
-- name: Configure ntp file
-  template: src=ntp.conf.j2 dest=/etc/ntp.conf
-  tags: ntp
-  notify: restart ntp
-
-- name: Start the ntp service
-  service: name=ntpd state=started enabled=yes
-  tags: ntp
-
-- name: test to see if selinux is running
-  command: getenforce
-  register: sestatus
-  changed_when: false
-
-- include: install_httpd.yml
-- include: copy_code.yml
-
+- name: ensure that common services are started
+  systemd:
+    name: "{{ item }}"
+    state: started 
+    enabled: yes
+  with_items:
+    - sshd
+    - ntpd
+  check_mode: yes
