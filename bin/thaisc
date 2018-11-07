@@ -70,7 +70,7 @@ if [[ -n $1 ]]; then
     ansible-playbook --ssh-common-args='-o StrictHostKeyChecking=no' -i ${ROOT_DIR}/inventories/${INVENTORY}.ini ${ROOT_DIR}/implement.yml $ANSIBLE_VERBOSE
     ;;
     up)
-    docker build -t centos7-base:$(md5 Dockerfile | cut -d " " -f4) ..
+    docker build -t centos7-base:$(md5 Dockerfile | cut -d " " -f4) .
     ansible-playbook -i ${ROOT_DIR}/inventories/${INVENTORY}.ini ${ROOT_DIR}/generate.yml --extra-vars "slurm_implementation=$IMPLEMENTATION"
     docker-compose up
     ;;
