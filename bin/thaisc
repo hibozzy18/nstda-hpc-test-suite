@@ -70,9 +70,15 @@ if [[ -n $1 ]]; then
     mkdir -p $result_dir
     dt=$(date '+%d_%m_%Y__%H_%M_%S');
     if [[ -n $SAVE_TEST_RESULT ]]; then
-      ansible-playbook --ssh-common-args='-o StrictHostKeyChecking=no' \
-        -i ${ROOT_DIR}/inventories/${INVENTORY}.ini \
-        --check ${ROOT_DIR}/test.yml $ANSIBLE_VERBOSE > ${result_dir}/${dt}.log
+      if [[ -n $ANSIBLE_VERBOSE ]]; then
+        ansible-playbook --ssh-common-args='-o StrictHostKeyChecking=no' \
+          -i ${ROOT_DIR}/inventories/${INVENTORY}.ini \
+          --check ${ROOT_DIR}/test.yml $ANSIBLE_VERBOSE > ${result_dir}/${dt}.detail.log
+      else
+        ansible-playbook --ssh-common-args='-o StrictHostKeyChecking=no' \
+          -i ${ROOT_DIR}/inventories/${INVENTORY}.ini \
+          --check ${ROOT_DIR}/test.yml $ANSIBLE_VERBOSE > ${result_dir}/${dt}.log
+      fi
     else
       ansible-playbook --ssh-common-args='-o StrictHostKeyChecking=no' \
         -i ${ROOT_DIR}/inventories/${INVENTORY}.ini \

@@ -8,6 +8,7 @@ RUN rpm -ivh ${ROOT_RPMS}/slurm-${SLURM_VERSION}-1.el7.x86_64.rpm \
   rm -rf ${ROOT_RPMS}/*
 
 # Fixed ownership and permission of Slurm
+ADD slurmdbd.service /usr/lib/systemd/system/slurmdbd.service
 RUN mkdir -p /var/log/slurm /var/run/slurm && \
   chown slurm: /var/log/slurm /var/run/slurm && \
   chmod 755 /var/log/slurm /var/run/slurm && \

@@ -63,11 +63,18 @@
         enabled: yes
     check_mode: yes
 
+
 - hosts: tara-frontend-1
   gather_facts: false
   tasks:
-  - name: Test srun -N 10 hostname
-    shell: srun -N 10 hostname
+  - name: Test sinfo
+    shell: sinfo
+    check_mode: no
+  - name: Test sacctmgr list cluster
+    shell: sacctmgr list cluster
+    check_mode: no
+  - name: Test srun -N 2 hostname
+    shell: srun -N 2 hostname
     register: hostlist_result
     check_mode: no
 
