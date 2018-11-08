@@ -1,0 +1,9 @@
+[2018-11-07T04:03:32.915] error: High latency for gettimeofday(): 11886 nanoseconds
+[2018-11-07T04:03:32.945] error: Unable to open pidfile `/var/run/slurm/slurmctld.pid': No such file or directory
+[2018-11-07T04:03:32.946] error: Configured MailProg is invalid
+[2018-11-07T04:03:32.946] slurmctld version 18.08.3 started on cluster tara
+[2018-11-07T04:03:32.991] error: slurm_persist_conn_open_without_init: failed to open persistent connection to slurmdbd-1:6819: Connection refused
+[2018-11-07T04:03:32.991] error: slurmdbd: Sending PersistInit msg: Connection refused
+[2018-11-07T04:03:32.992] error: Association database appears down, reading from state file.
+[2018-11-07T04:03:32.992] error: Unable to get any information from the state file
+[2018-11-07T04:03:32.992] fatal: slurmdbd and/or database must be up at slurmctld start time

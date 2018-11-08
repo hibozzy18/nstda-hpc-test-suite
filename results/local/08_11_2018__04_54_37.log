@@ -1,0 +1,287 @@
+
+PLAY [all] **********************************************************************************************************************************************************************
+
+TASK [Test can ls all machine] **************************************************************************************************************************************************
+changed: [localhost]
+changed: [slurmdbd-1]
+changed: [tara-m-002]
+fatal: [freeipa-1]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: ssh: connect to host 172.22.5.2 port 22: No route to host\r\n", "unreachable": true}
+changed: [tara-m-001]
+changed: [tara-frontend-1]
+changed: [tara-c-001]
+changed: [tara-c-003]
+changed: [tara-c-002]
+changed: [tara-c-004]
+changed: [tara-c-005]
+fatal: [mysql-1]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: ssh: connect to host 172.22.5.5 port 22: Connection refused\r\n", "unreachable": true}
+fatal: [nfs]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: ssh: connect to host 172.22.5.1 port 22: Connection refused\r\n", "unreachable": true}
+changed: [tara-c-006]
+changed: [tara-dgx1-002]
+changed: [tara-dgx1-001]
+changed: [slurmctld-1]
+
+PLAY [localhost] ****************************************************************************************************************************************************************
+
+TASK [Check ansible version !=2.7.0] ********************************************************************************************************************************************
+ok: [localhost] => {
+    "changed": false, 
+    "msg": "All assertions passed"
+}
+
+PLAY [Check common/slurm_common packages and services to all nodes] *************************************************************************************************************
+
+TASK [common : ensure all common packages are installed] ************************************************************************************************************************
+ok: [tara-m-002]
+ok: [tara-c-001]
+ok: [slurmdbd-1]
+ok: [tara-m-001]
+ok: [tara-frontend-1]
+ok: [tara-c-002]
+ok: [tara-c-003]
+ok: [tara-c-004]
+ok: [tara-c-005]
+ok: [tara-c-006]
+ok: [tara-dgx1-001]
+ok: [tara-dgx1-002]
+ok: [slurmctld-1]
+
+TASK [common : ensure that common services are started] *************************************************************************************************************************
+ok: [tara-m-001] => (item=sshd)
+ok: [tara-m-002] => (item=sshd)
+ok: [slurmdbd-1] => (item=sshd)
+ok: [tara-frontend-1] => (item=sshd)
+ok: [tara-c-001] => (item=sshd)
+ok: [tara-m-002] => (item=ntpd)
+ok: [slurmdbd-1] => (item=ntpd)
+ok: [tara-m-001] => (item=ntpd)
+ok: [tara-frontend-1] => (item=ntpd)
+ok: [tara-c-001] => (item=ntpd)
+ok: [tara-c-002] => (item=sshd)
+ok: [tara-c-003] => (item=sshd)
+ok: [tara-c-004] => (item=sshd)
+ok: [tara-c-005] => (item=sshd)
+ok: [tara-c-006] => (item=sshd)
+ok: [tara-c-002] => (item=ntpd)
+ok: [tara-c-003] => (item=ntpd)
+ok: [tara-c-004] => (item=ntpd)
+ok: [tara-c-005] => (item=ntpd)
+ok: [tara-c-006] => (item=ntpd)
+ok: [tara-dgx1-001] => (item=sshd)
+ok: [tara-dgx1-002] => (item=sshd)
+ok: [slurmctld-1] => (item=sshd)
+ok: [tara-dgx1-001] => (item=ntpd)
+ok: [slurmctld-1] => (item=ntpd)
+ok: [tara-dgx1-002] => (item=ntpd)
+
+TASK [slurm_common : ensure all slurm plugins package dependecies are installed] ************************************************************************************************
+ok: [tara-m-001]
+ok: [slurmdbd-1]
+ok: [tara-m-002]
+ok: [tara-frontend-1]
+ok: [tara-c-001]
+ok: [tara-c-002]
+ok: [tara-c-003]
+ok: [tara-c-005]
+ok: [tara-c-004]
+ok: [tara-c-006]
+ok: [tara-dgx1-001]
+ok: [tara-dgx1-002]
+ok: [slurmctld-1]
+
+TASK [slurm_common : ensure all MUNGE package dependencies are installed] *******************************************************************************************************
+ok: [slurmdbd-1]
+ok: [tara-m-001]
+ok: [tara-frontend-1]
+ok: [tara-m-002]
+ok: [tara-c-001]
+ok: [tara-c-002]
+ok: [tara-c-004]
+ok: [tara-c-003]
+ok: [tara-c-005]
+ok: [tara-c-006]
+ok: [tara-dgx1-001]
+ok: [tara-dgx1-002]
+ok: [slurmctld-1]
+
+TASK [slurm_common : ensure all Lmod package dependencies are installed] ********************************************************************************************************
+ok: [slurmdbd-1]
+ok: [tara-m-001]
+ok: [tara-m-002]
+ok: [tara-c-001]
+ok: [tara-frontend-1]
+ok: [tara-c-002]
+ok: [tara-c-003]
+ok: [tara-c-006]
+ok: [tara-c-004]
+ok: [tara-c-005]
+ok: [tara-dgx1-001]
+ok: [tara-dgx1-002]
+ok: [slurmctld-1]
+
+TASK [slurm_common : ensure that munge service are started] *********************************************************************************************************************
+ok: [slurmdbd-1] => (item=munge)
+ok: [tara-m-001] => (item=munge)
+ok: [tara-m-002] => (item=munge)
+ok: [tara-frontend-1] => (item=munge)
+ok: [tara-c-001] => (item=munge)
+ok: [tara-c-002] => (item=munge)
+ok: [tara-c-003] => (item=munge)
+ok: [tara-c-004] => (item=munge)
+ok: [tara-c-006] => (item=munge)
+ok: [tara-c-005] => (item=munge)
+ok: [tara-dgx1-001] => (item=munge)
+ok: [tara-dgx1-002] => (item=munge)
+ok: [slurmctld-1] => (item=munge)
+
+PLAY [Check all slurmctcld (Head node) nodes are running] ***********************************************************************************************************************
+
+TASK [ensure that slurmctld service are started] ********************************************************************************************************************************
+ok: [slurmctld-1]
+
+PLAY [Check all slurmdbd node are running] **************************************************************************************************************************************
+
+TASK [ensure that slurmdbd service are started] *********************************************************************************************************************************
+ok: [slurmdbd-1]
+
+PLAY [Check all slurmd (Computes) nodes are running] ****************************************************************************************************************************
+
+TASK [ensure that slurmd service are started] ***********************************************************************************************************************************
+ok: [tara-c-001]
+ok: [tara-c-005]
+ok: [tara-c-003]
+ok: [tara-c-002]
+ok: [tara-c-004]
+ok: [tara-c-006]
+ok: [tara-m-002]
+ok: [tara-m-001]
+ok: [tara-dgx1-001]
+ok: [tara-dgx1-002]
+
+PLAY [tara-frontend-1] **********************************************************************************************************************************************************
+
+TASK [Test sinfo] ***************************************************************************************************************************************************************
+changed: [tara-frontend-1]
+
+TASK [Test sacctmgr list cluster] ***********************************************************************************************************************************************
+changed: [tara-frontend-1]
+
+TASK [Test srun -N 2 hostname] **************************************************************************************************************************************************
+changed: [tara-frontend-1]
+
+PLAY [Check gpfs functionallity] ************************************************************************************************************************************************
+
+TASK [Retrieve file result from all nodes.] *************************************************************************************************************************************
+ok: [tara-c-001]
+ok: [tara-m-001]
+ok: [slurmdbd-1]
+ok: [tara-frontend-1]
+ok: [tara-m-002]
+ok: [tara-c-003]
+ok: [tara-c-002]
+ok: [tara-c-004]
+ok: [tara-c-006]
+ok: [tara-c-005]
+ok: [tara-dgx1-002]
+ok: [tara-dgx1-001]
+ok: [slurmctld-1]
+
+TASK [assert] *******************************************************************************************************************************************************************
+fatal: [slurmdbd-1]: FAILED! => {
+    "assertion": "file_result.stat.exists", 
+    "changed": false, 
+    "evaluated_to": false, 
+    "msg": "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
+}
+fatal: [tara-m-001]: FAILED! => {
+    "assertion": "file_result.stat.exists", 
+    "changed": false, 
+    "evaluated_to": false, 
+    "msg": "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
+}
+fatal: [tara-m-002]: FAILED! => {
+    "assertion": "file_result.stat.exists", 
+    "changed": false, 
+    "evaluated_to": false, 
+    "msg": "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
+}
+fatal: [tara-frontend-1]: FAILED! => {
+    "assertion": "file_result.stat.exists", 
+    "changed": false, 
+    "evaluated_to": false, 
+    "msg": "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
+}
+fatal: [tara-c-001]: FAILED! => {
+    "assertion": "file_result.stat.exists", 
+    "changed": false, 
+    "evaluated_to": false, 
+    "msg": "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
+}
+fatal: [tara-c-002]: FAILED! => {
+    "assertion": "file_result.stat.exists", 
+    "changed": false, 
+    "evaluated_to": false, 
+    "msg": "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
+}
+fatal: [tara-c-003]: FAILED! => {
+    "assertion": "file_result.stat.exists", 
+    "changed": false, 
+    "evaluated_to": false, 
+    "msg": "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
+}
+fatal: [tara-c-005]: FAILED! => {
+    "assertion": "file_result.stat.exists", 
+    "changed": false, 
+    "evaluated_to": false, 
+    "msg": "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
+}
+fatal: [tara-c-004]: FAILED! => {
+    "assertion": "file_result.stat.exists", 
+    "changed": false, 
+    "evaluated_to": false, 
+    "msg": "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
+}
+fatal: [tara-c-006]: FAILED! => {
+    "assertion": "file_result.stat.exists", 
+    "changed": false, 
+    "evaluated_to": false, 
+    "msg": "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
+}
+fatal: [tara-dgx1-001]: FAILED! => {
+    "assertion": "file_result.stat.exists", 
+    "changed": false, 
+    "evaluated_to": false, 
+    "msg": "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
+}
+fatal: [tara-dgx1-002]: FAILED! => {
+    "assertion": "file_result.stat.exists", 
+    "changed": false, 
+    "evaluated_to": false, 
+    "msg": "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
+}
+fatal: [slurmctld-1]: FAILED! => {
+    "assertion": "file_result.stat.exists", 
+    "changed": false, 
+    "evaluated_to": false, 
+    "msg": "All frontend, head nodes, compute nodes see exact same file over /gpfs dir"
+}
+	to retry, use: --limit @/home/ansible/src/test.retry
+
+PLAY RECAP **********************************************************************************************************************************************************************
+freeipa-1                  : ok=0    changed=0    unreachable=1    failed=0   
+localhost                  : ok=2    changed=1    unreachable=0    failed=0   
+mysql-1                    : ok=0    changed=0    unreachable=1    failed=0   
+nfs                        : ok=0    changed=0    unreachable=1    failed=0   
+slurmctld-1                : ok=9    changed=1    unreachable=0    failed=1   
+slurmdbd-1                 : ok=9    changed=1    unreachable=0    failed=1   
+tara-c-001                 : ok=9    changed=1    unreachable=0    failed=1   
+tara-c-002                 : ok=9    changed=1    unreachable=0    failed=1   
+tara-c-003                 : ok=9    changed=1    unreachable=0    failed=1   
+tara-c-004                 : ok=9    changed=1    unreachable=0    failed=1   
+tara-c-005                 : ok=9    changed=1    unreachable=0    failed=1   
+tara-c-006                 : ok=9    changed=1    unreachable=0    failed=1   
+tara-dgx1-001              : ok=9    changed=1    unreachable=0    failed=1   
+tara-dgx1-002              : ok=9    changed=1    unreachable=0    failed=1   
+tara-frontend-1            : ok=11   changed=4    unreachable=0    failed=1   
+tara-m-001                 : ok=9    changed=1    unreachable=0    failed=1   
+tara-m-002                 : ok=9    changed=1    unreachable=0    failed=1   
+
