@@ -68,7 +68,14 @@ where:
                           to get a clean environment.
         admin(subcmd)   - alias for > docker exec -it admin /bin/bash
 ```
+### Prior Arts & Source of Inspiration
+ - [slurm-docker-cluster](https://github.com/giovtorres/slurm-docker-cluster)
+ - [docker-slurm](https://github.com/GRomR1/docker-slurmbase)
+ - [slurm-on-kubernetes](https://github.com/sinonkt/slurm-on-kubernete)(My Prior project)
 
-### Contributors
+### Contributors (Need update)
   - Krittin Phornsiricharoenphant, oatkrittin@gmail.com
   - Putt Sakdhnagool, putt.sakdhnagool@nectec.or.th
+  
+## Acknowlegdement (Need update)
+ThaiSC team. 
