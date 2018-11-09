@@ -3,7 +3,7 @@
 # See the slurm.conf man page for more information.
 #
 ClusterName=tara
-SlurmctldHost=slurmctld-1
+SlurmctldHost=slurmctld
 #SlurmctldHost=
 # 
 AuthType=auth/munge
@@ -53,7 +53,7 @@ TmpFS=/tmp
 #TreeWidth= 
 #UnkillableStepProgram= 
 #UsePAM=0 
-CpuFreqGovernors=OnDemand,Performance,PowerSave,UserSpace
+CpuFreqGovernors=OnDemand, Performance,PowerSave, UserSpace
 CpuFreqDef=Performance
 # 
 # 
@@ -82,7 +82,7 @@ HealthCheckNodeState=ANY
 # 
 # SCHEDULING 
 #DefMemPerCPU=0 
-FastSchedule=2
+FastSchedule=1
 #MaxMemPerCPU=0 
 #SchedulerTimeSlice=30 
 SchedulerType=sched/backfill
@@ -108,10 +108,10 @@ PriorityWeightQOS= 1000
 # 
 # LOGGING AND ACCOUNTING 
 #AccountingStorageEnforce=0 
-AccountingStorageHost=slurmdbd-1
+#AccountingStorageHost=
 #AccountingStorageLoc=
 #AccountingStoragePass=
-AccountingStoragePort=6819
+#AccountingStoragePort=
 AccountingStorageType=accounting_storage/slurmdbd
 #AccountingStorageUser=
 AccountingStoreJobComment=YES

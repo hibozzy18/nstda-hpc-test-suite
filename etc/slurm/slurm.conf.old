@@ -43,7 +43,7 @@ SlurmdUser=root
 StateSaveLocation=/var/spool/slurm/slurm.state
 SwitchType=switch/none
 #TaskEpilog=
-TaskPlugin=task/affinity,task/cgroup
+TaskPlugin=task/affinity
 TaskPluginParam=Sched
 #TaskProlog=
 TopologyPlugin=topology/tree 
@@ -114,8 +114,8 @@ AccountingStorageHost=slurmdbd-1
 AccountingStoragePort=6819
 AccountingStorageType=accounting_storage/slurmdbd
 #AccountingStorageUser=
-AccountingStoreJobComment=YES
-ClusterName=tara
+#AccountingStoreJobComment=YES
+#ClusterName=tara
 #DebugFlags= 
 #JobCompHost=
 #JobCompLoc=
@@ -147,6 +147,7 @@ SlurmSchedLogLevel=1
 # 
 # 
 # COMPUTE NODES 
+# [2018-11-07T19:25:35.520] CPUs=2 Boards=1 Sockets=2 Cores=1 Threads=1 Memory=3947 TmpDisk=59816 Uptime=5132 CPUSpecList=(null) FeaturesAvail=(null) FeaturesActive=(null)
 NodeName=tara-c-[001-006] CPUs=4 RealMemory=512 Sockets=2 CoresPerSocket=2 ThreadsPerCore=1 State=UNKNOWN TmpDisk=256
 NodeName=tara-m-[001-002] CPUs=8 RealMemory=1024 Sockets=2 CoresPerSocket=4 ThreadsPerCore=1 State=UNKNOWN TmpDisk=512
 NodeName=tara-dgx1-[001-002] CPUs=4 RealMemory=1024 Sockets=2 CoresPerSocket=2 ThreadsPerCore=1 State=UNKNOWN TmpDisk=512
