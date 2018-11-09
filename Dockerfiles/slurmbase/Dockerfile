@@ -120,8 +120,8 @@ RUN groupadd -g 984 modules && \
     chmod a+rx ${MODULES_DIR}
 ADD ./etc/profile.d/z01_EasyBuild.sh /etc/profile.d/z01_EasyBuild.sh
 
-RUN mkdir -p /var/spool/slurm /var/run/slurm /var/log/slurm && \
-    chown slurm: /var/spool/slurm /var/run/slurm /var/log/slurm
+RUN mkdir -p /var/spool/slurm /var/log/slurm && \
+    chown slurm: /var/spool/slurm /var/log/slurm
 
 VOLUME [ "/etc/slurm" ]
 
