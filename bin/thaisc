@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Credit https://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within
-ROOT_DIR=$(realpath "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"/..)
+ROOT_DIR=$(dirname "$0")/..
 usage="$(basename "$0") [-h|--help] [-e|--environment -i|--implement play] -- thaisc deploy/test suite, ansible-playbook command wrapper
 most of time, we run implement/test play inside admin container. and for generate/up/build/clean/admin run on host machine.
 this script was created from my frequently used cmd. (Krittin Phornsiricharoenphant, oatkrittin@gmail.com)
