@@ -69,6 +69,6 @@ where:
         admin(subcmd)   - alias for > docker exec -it admin /bin/bash
 ```
 
-### Contact
+### Contributors
   - Krittin Phornsiricharoenphant, oatkrittin@gmail.com
   - Putt Sakdhnagool, putt.sakdhnagool@nectec.or.th
